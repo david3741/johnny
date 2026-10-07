@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Mail öffnen</title>
+<style>body{font:17px/1.6 -apple-system,system-ui,sans-serif;max-width:640px;margin:40px auto;padding:0 16px;color:#222;background:#fff;text-align:center}a.b{display:block;margin:14px 0;padding:14px;border-radius:12px;background:#1a73e8;color:#fff;text-decoration:none;font-weight:600}a.s{background:#eee;color:#222}@media(prefers-color-scheme:dark){body{color:#ddd;background:#111}a.s{background:#333;color:#ddd}}</style>
+</head><body>
+<p id="t">Gmail wird geöffnet …</p>
+<a class="b" id="app" href="#">In der Gmail-App öffnen</a>
+<a class="b s" id="web" href="#">Im Browser öffnen</a>
+<script>
+// Alles steht hinter dem # im Link. Dieser Teil wird nie an einen Server geschickt, er bleibt auf dem Gerät.
+var p = new URLSearchParams(location.hash.slice(1));
+var to = p.get("to") || "", su = p.get("su") || "", body = p.get("body") || "", cc = p.get("cc") || "", konto = p.get("konto") || "";
+var e = encodeURIComponent;
+var app = "googlegmail:///co?to=" + e(to) + "&subject=" + e(su) + "&body=" + e(body) + (cc ? "&cc=" + e(cc) : "");
+var web = "https://mail.google.com/mail/?" + (konto ? "authuser=" + e(konto) + "&" : "") + "view=cm&fs=1&to=" + e(to) + "&su=" + e(su) + "&body=" + e(body) + (cc ? "&cc=" + e(cc) : "");
+document.getElementById("app").href = app;
+document.getElementById("web").href = web;
+var mobil = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (!to && !su && !body) { document.getElementById("t").textContent = "Kein Mail-Entwurf im Link."; }
+else if (mobil) { location.href = app; }
+else { location.replace(web); }
+</script>
+</body></html>
